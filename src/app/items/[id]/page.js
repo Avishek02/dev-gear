@@ -1,43 +1,58 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
-// dataset of developer tools
-const devTools = [
-  { id: 1, name: "Cursor AI", category: "IDE", rating: 4.9, description: "The AI-first code editor built for pair programming. It helps you write, edit, and chat with your code like never before.", fullInfo: "Cursor is a fork of VS Code that integrates powerful AI models to suggest code changes and explain complex logic.", img: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800" },
-  { id: 2, name: "DaisyUI", category: "CSS Library", rating: 4.8, description: "The most popular component library for Tailwind CSS.", fullInfo: "DaisyUI adds clean, semantic class names to Tailwind CSS, making your HTML smaller and development faster.", img: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=800" },
-  { id: 3, name: "Supabase", category: "Database", rating: 4.7, description: "The open source Firebase alternative for backend.", fullInfo: "Supabase provides a full Postgres database, authentication, instant APIs, edge functions, and real-time subscriptions.", img: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800" },
-  { id: 4, name: "Vercel", category: "Deployment", rating: 5.0, description: "The platform for frontend teams to ship fast.", fullInfo: "Vercel is optimized for Next.js and provides a seamless workflow for previewing and deploying frontend applications.", img: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800" }
-];
-
 export default function DetailsPage() {
   const { id } = useParams();
-  
-  // search for the tool by id
-  const tool = devTools.find((item) => item.id === parseInt(id));
+  const [tool, setTool] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!tool) {
-    return <div className="text-center py-20">Tool not found!</div>;
-  }
+  useEffect(() => {
+    fetch(`/api/items/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTool(data);
+        setLoading(false);
+      })
+      .catch((err) => console.error(err));
+  }, [id]);
+
+  if (loading) return <div className="text-center py-20"><span className="loading loading-spinner loading-lg"></span></div>;
+  if (!tool || tool.error) return <div className="text-center py-20 font-bold text-error">Tool not found!</div>;
 
   return (
     <div className="container mx-auto p-10 min-h-screen">
-      <Link href="/items" className="btn btn-ghost mb-6">← Back to Toolkit</Link>
+      <Link href="/items" className="btn btn-ghost mb-8 hover:bg-base-200">← Back to Toolkit</Link>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        <img src={tool.img} alt={tool.name} className="rounded-3xl shadow-2xl w-full h-96 object-cover" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        <div className="relative group">
+          <img src={tool.img} alt={tool.name} className="rounded-[2.5rem] shadow-2xl w-full h-[500px] object-cover border-4 border-base-200" />
+          <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-t from-black/20 to-transparent"></div>
+        </div>
         
-        <div className="space-y-6">
-          <div className="badge badge-primary badge-lg">{tool.category}</div>
-          <h1 className="text-5xl font-black">{tool.name}</h1>
-          <p className="text-2xl font-bold text-primary">Rating: ⭐ {tool.rating}</p>
-          <div className="divider"></div>
-          <p className="text-xl opacity-80 leading-relaxed">{tool.description}</p>
-          <p className="bg-base-200 p-6 rounded-2xl italic">{tool.fullInfo}</p>
+        <div className="space-y-8">
+          <div className="badge badge-primary badge-lg p-4 font-bold uppercase tracking-widest">{tool.category}</div>
+          <h1 className="text-6xl font-black tracking-tighter">{tool.name}</h1>
           
-          <div className="flex gap-4 pt-6">
-            <button className="btn btn-primary btn-lg">Official Website</button>
-            <button className="btn btn-outline btn-lg">Documentation</button>
+          <div className="flex items-center gap-2">
+            <span className="text-3xl">⭐</span>
+            <span className="text-4xl font-black text-primary">{tool.rating}</span>
+            <span className="text-lg opacity-50 ml-2">/ 5.0 Rating</span>
+          </div>
+
+          <div className="divider"></div>
+          
+          <div>
+            <h3 className="text-xl font-bold mb-3 uppercase opacity-50">About this tool</h3>
+            <p className="text-xl leading-relaxed opacity-80 bg-base-200 p-8 rounded-3xl border-l-8 border-primary italic">
+              "{tool.description}"
+            </p>
+          </div>
+          
+          <div className="flex gap-4 pt-4">
+            <button className="btn btn-primary btn-lg flex-1 shadow-xl">Try {tool.name}</button>
+            <button className="btn btn-outline btn-lg flex-1">Documentation</button>
           </div>
         </div>
       </div>

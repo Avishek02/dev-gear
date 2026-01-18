@@ -29,7 +29,7 @@ export default function ItemsPage() {
               <h2 className="card-title text-2xl">{tool.name}</h2>
               <p className="opacity-70 text-sm">{tool.description}</p>
               <div className="card-actions justify-end mt-5">
-                <Link href={`/items/${tool.id}`} className="btn btn-primary btn-sm">Details</Link>
+                <Link href={`/items/${tool._id}`} className="btn btn-primary btn-sm">Details</Link>
               </div>
             </div>
           </div>
