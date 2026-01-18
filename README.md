@@ -3,7 +3,7 @@
 DevStack is a professional curated directory for developers to explore AI tools, frameworks, and deployment platforms. This project is built using **Next.js 16 (Turbopack)** and **MongoDB Atlas** for persistent data storage.
 
 ## 🌐 Live Demo
-[Insert your Vercel/Netlify Live Link Here]
+https://devstack02.vercel.app/
 
 ## ✨ Key Features
 - **Dynamic Resource Library**: Fetches and displays developer tools in real-time from MongoDB.
@@ -20,7 +20,7 @@ DevStack is a professional curated directory for developers to explore AI tools,
 - **Deployment**: Vercel
 
 ## 🔑 Admin Credentials
-- **Email**: `admin@devgear.com`
+- **Email**: `admin@devstack.com`
 - **Password**: `admin123`
 
 ## 📁 Project Structure

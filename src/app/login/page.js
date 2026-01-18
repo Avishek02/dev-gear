@@ -10,11 +10,11 @@ export default function LoginPage() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (email === "admin@devgear.com" && password === "admin123") {
+    if (email === "admin@devstack.com" && password === "admin123") {
       Cookies.set('auth_token', 'true', { expires: 1 });
       router.push('/add-item');
     } else {
-      alert("Invalid Credentials! Use: admin@devgear.com / admin123");
+      alert("Invalid Credentials! Use: admin@devstack.com / admin123");
     }
   };
 
